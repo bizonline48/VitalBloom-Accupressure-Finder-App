@@ -546,14 +546,7 @@ export default function VitalBloomApp(){
   const alert=symptom?ALERTS[symptom]:null;
   const sym=SYMPTOMS.find(s=>s.id===symptom);
 
-   if (!accessChecked) {
-  if (!accessAllowed) {
-  return (
-    <div style={{ padding: 24, fontFamily: "Arial, sans-serif" }}>
-      {accessMessage}
-    </div>
-  );
-}
+  if (!accessChecked) {
   return (
     <div style={{ padding: 24, fontFamily: "Arial, sans-serif" }}>
       Checking access...
@@ -567,7 +560,7 @@ if (!accessAllowed) {
       {accessMessage}
     </div>
   );
-} 
+}
     
   return <div style={{minHeight:"100vh",background:P.bg,paddingBottom:60,fontFamily:"system-ui,sans-serif"}}>
     <div style={{background:"linear-gradient(160deg,#FFFFFF 0%,#F8F2EC 100%)",padding:"28px 24px 20px",textAlign:"center",borderBottom:`1px solid ${P.border}`,position:"relative",overflow:"hidden"}}>
@@ -582,7 +575,6 @@ if (!accessAllowed) {
     <div style={{maxWidth:540,margin:"0 auto",padding:"0 18px"}}>
       {!hasAccess&&<div style={{marginTop:24}}><EmailGate onUnlock={()=>setHasAccess(true)}/></div>}
 
-      {hasAccess&&<>
         <div style={{background:`linear-gradient(135deg,${P.accentSoft},${P.sageSoft})`,borderRadius:14,padding:"12px 18px",margin:"18px 0 14px",border:`1px solid ${P.border}`}}>
           <p style={{margin:0,fontSize:13,color:P.textMid,lineHeight:1.5}}>🌸 <strong style={{color:P.accent}}>Access granted.</strong> Points verified from Singapore College of Traditional Chinese Medicine paediatric tuina sources.</p>
         </div>
