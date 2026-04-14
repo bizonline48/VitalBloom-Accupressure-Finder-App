@@ -481,7 +481,6 @@ function EmailGate({onUnlock}){
 }
 
 export default function VitalBloomApp(){
-  const [hasAccess, setHasAccess] = useState(false);
   const [symptom, setSymptom] = useState("");
   const [babyAge, setBabyAge] = useState("");
   const [points, setPoints] = useState(null);
@@ -493,16 +492,50 @@ export default function VitalBloomApp(){
   const [accessAllowed, setAccessAllowed] = useState(false);
   const [accessMessage, setAccessMessage] = useState("Checking access...");
 
-  useEffect(() => {
+  
+    useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const email = params.get("email");
 
-    if (email) {
+        if (email) {
       console.log("User email detected:", email);
-    
+    }
 
-  verifyAccess();
-}, []); 
+    if (!email) {
+      setAccessMessage("Access denied. Please register first.");
+      setAccessAllowed(false);
+      setAccessChecked(true);
+      return;
+    }
+
+    async function verifyAccess() {
+      try {
+        const res = await fetch("https://script.google.com/macros/s/AKfycbwQiW6FWjOTu3Tgfp_AIaRJNE3V_EFEnOBMhIPtCnsmYUpX-nXdh6S8nDMD0So8uW-glA/exec", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ email })
+        });
+
+        const data = await res.json();
+
+        if (data.allowed) {
+          setAccessAllowed(true);
+        } else {
+          setAccessAllowed(false);
+          setAccessMessage("Access denied. Use the same email you registered.");
+        }
+      } catch (err) {
+        setAccessAllowed(false);
+        setAccessMessage("Error verifying access. Try again.");
+      } finally {
+        setAccessChecked(true);
+      }
+    }
+
+    verifyAccess();
+  }, []);
   function showPoints(){
     if(!babyAge||!symptom)return;
     setLoading(true);
